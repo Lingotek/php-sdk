@@ -1,0 +1,11 @@
+vendor
+composer.lock
+
+# Mac finder artifacts
+.DS_Store
+
+# vim artifacts
+**.swp
+
+# Netbeans project directory
+/nbproject/

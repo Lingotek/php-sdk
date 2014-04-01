@@ -31,6 +31,9 @@ class RestClient implements \Iterator, \ArrayAccess {
   /** @const VERBOSE if is debug enabled, you can choose verbose level 0=less|1=more */
 	const VERBOSE = 0;
 
+  /** @const NO_FORMAT used when no format is detected */
+  const NO_FORMAT = 'none';
+
   /** @var array  */
 	public $options;
 	/** @var object cURL resource */
@@ -77,9 +80,7 @@ class RestClient implements \Iterator, \ArrayAccess {
 			'format_regex' => "/(\w+)\/(\w+)(;[.+])?/",
 			'decoders' => array(
 				'json' => 'json_decode',
-				'php' => 'unserialize',
-        'plain' => 'trim',
-        'html' => 'trim'
+				'php' => 'unserialize'
       ),
       'form_encode_resources' => array(
         'document'
@@ -382,8 +383,8 @@ class RestClient implements \Iterator, \ArrayAccess {
 		return $client;
 	}
 
-  public function parse_response($response){
-		$headers = null;
+  public function parse_response($response) {
+    $headers = null;
 		$parts = explode("\r\n\r\n", $response);
 		$body = '';
 		if (self::DEBUG) $this->debug(1, 'curl response', $response);
@@ -423,11 +424,11 @@ class RestClient implements \Iterator, \ArrayAccess {
 		if (self::DEBUG) $this->debug(0, 'decoded header', $headers);
 		$this->headers = (object) $headers;
 		$this->response = $body;
-	}
+  }
 
-	public function get_response_format(){
-		if(!$this->response)
-			throw new RestClientException(
+	public function get_response_format() {
+    if (!property_exists($this, 'response')) //!$this->response
+      throw new RestClientException(
 				"A response must exist before it can be decoded.");
 
     // User-defined format.
@@ -440,8 +441,7 @@ class RestClient implements \Iterator, \ArrayAccess {
 			}
 		}
 
-		throw new RestClientException(
-			"Response format could not be determined. \n" . print_r($this->headers, true));
+    return self::NO_FORMAT; // No response format could not be determined
   }
 
   public function format_query($parameters, $primary = '=', $secondary = '&') {
@@ -456,16 +456,17 @@ class RestClient implements \Iterator, \ArrayAccess {
   public function decode_response(){
 		if(empty($this->decoded_response)){
 			$format = $this->get_response_format();
-      if(!array_key_exists($format, $this->options['decoders']))
-				throw new RestClientException("\"${format}\" is not a supported " .
-        "format, register a decoder to handle this response.");
+      if (array_key_exists($format, $this->options['decoders'])) {
+        $this->decoded_response = call_user_func(
+            $this->options['decoders'][$format], $this->response);
+      }
+      else {
+        $this->decoded_response = $this->response; // assume no decoding is necessary when no response format is provided
+      }
+    }
 
-			$this->decoded_response = call_user_func(
-				$this->options['decoders'][$format], $this->response);
-		}
-
-		return $this->decoded_response;
-	}
+    return $this->decoded_response;
+  }
 
 	/**
 	 * Debug function

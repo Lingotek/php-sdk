@@ -31,7 +31,7 @@ sleep(2);
 // Create Document
 $params = array(
   'title' => 'My New Document',
-  'document' => 'The quick brown fox jumped over the lazy dog. (Time:' . time() . ')',
+  'content' => 'The quick brown fox jumped over the lazy dog. (Time:' . time() . ')',
   'format' => 'PLAINTEXT',
   'locale_code' => 'en_US',
   'project_id' => $project_id

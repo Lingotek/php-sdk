@@ -4,7 +4,7 @@ require_once '../src/Lingotek.php';
 
 use Lingotek\Dev;
 
-$access_token = '5ef6af47-613e-37ff-9d9b-a47f1c750244'; //'b068b8d9-c35b-3139-9fe2-e22ee7998d9f'; // sandbox token
+$access_token = 'b068b8d9-c35b-3139-9fe2-e22ee7998d9f'; // sandbox token
 
 $client = new \Lingotek\RestClient(array(
   'access_token' => $access_token

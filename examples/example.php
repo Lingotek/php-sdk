@@ -7,7 +7,8 @@ use Lingotek\Dev;
 $access_token = 'b068b8d9-c35b-3139-9fe2-e22ee7998d9f'; // sandbox token
 
 $client = new \Lingotek\RestClient(array(
-  'access_token' => $access_token
+  'access_token' => $access_token,
+  'base_url' => \Lingotek\RestClient::URL_SANDBOX
     ));
 
 // Get Community
@@ -17,30 +18,28 @@ $community_id = $result->decoded_response->entities[0]->properties->id; // get f
 echo "[" . $result->info->http_code . "] community_id: $community_id\n";
 
 // Grab the "Sample Project"
-
+$project_id = NULL;
 $params = array(
   'community_id' => $community_id
 );
 $result = $client->get('project', $params);
 $projects = $result->decoded_response->entities;
 foreach ($projects as $project) {
-  //if project name is "Sample Project" then use the id
-  if ($project->properties->title == "Sample Project") {
+  if ($project->properties->title == "Sample Project") { //if project name is "Sample Project" then use the id
     $project_id = $project->properties->id;
     echo "[" . $result->info->http_code . "] project_id: $project_id (existing: \"" . $project->properties->title . "\")\n";
   }
 }
 
 if (is_null($project_id)) {
-// Create Project
+// Create Project (when "Sample Project" was not found)
   $params = array(
-    'title' => 'My New Project',
+    'title' => 'Sample Project',
     'community_id' => $community_id,
     'workflow_id' => 'c675bd20-0688-11e2-892e-0800200c9a66' // machine translation workflow
   );
   $result = $client->post('project', $params);
-  $project_id = substr($result->headers->content_location, strrpos($result->headers->content_location, '/') + 1); // temp until API 5 makes newly created id is available in JSON bodycms
-
+  $project_id = substr($result->headers->content_location, strrpos($result->headers->content_location, '/') + 1); // temp until API 5 makes newly created id is available in JSON body
   echo "[" . $result->info->http_code . "] project_id: $project_id (created)\n";
 }
 
@@ -70,8 +69,8 @@ while (!$done_processing) {
   try {
     $result = $client->get('document', $params);
   } catch (Exception $e) {
-    echo " [" . $e->getCode() . "] ";
-    echo "importing\n"; //"(" . $e->getMessage() . ")\n";
+    echo " [" . $e->getCode() . "] "; //"(" . $e->getMessage() . ")\n";
+    echo "importing\n";
     sleep(3);
     continue;
   }
@@ -90,7 +89,7 @@ while (!$done_processing) {
 $locale_codes = array('zh_CN'); // Chinese
 $params = array(
   'document_id' => $document_id,
-    //'workflow_id' => 'c675bd20-0688-11e2-892e-0800200c9a66' // machine translation workflow
+  'workflow_id' => 'c675bd20-0688-11e2-892e-0800200c9a66' // machine translation workflow
 );
 foreach ($locale_codes as $locale_code) {
   $params['locale_code'] = $locale_code;

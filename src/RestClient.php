@@ -204,7 +204,8 @@ class RestClient implements \Iterator, \ArrayAccess {
         unset($parameters[$id_key]);
       }
     }
-    $this->format_as_needed($resource, $method, $parameters);
+
+    $this->format_as_needed($url, $resource, $method, $parameters);
   }
 
   /**
@@ -214,12 +215,15 @@ class RestClient implements \Iterator, \ArrayAccess {
    * @param string $method
    * @param mixed $parameters (array or string)
    */
-  private function format_as_needed($resource, $method, &$parameters) {
-    if (in_array($method, array('POST', 'PUT', 'PATCH')) && !in_array($resource, $this->options['form_encode_resources'])) {
-      $parameters = $this->format_query($parameters); // parameters will be formatted in the standard way
+  private function format_as_needed($url, $resource, $method, &$parameters) {
+    if (in_array($method, array('POST', 'PUT', 'PATCH')) && in_array($resource, $this->options['form_encode_resources']) && strpos($url, "translation") === FALSE) {
+      // parameters will be formatted using multipart/form-data
+      if (array_key_exists('content', $parameters) && !is_string($parameters['content']) && array_key_exists('format', $parameters) && strcasecmp($parameters['format'], 'JSON') == 0) {
+        $parameters['content'] = json_encode($parameters['content']);
+      }
     }
     else {
-      // parameters will be formatted using multipart/form-data
+      $parameters = $this->format_query($parameters); // parameters will be formatted in the standard way
     }
   }
 
@@ -314,6 +318,7 @@ class RestClient implements \Iterator, \ArrayAccess {
     $this->parameterize_url($url, $method, $parameters);
     if (self::DEBUG)
       $this->debug(0, 'executing curl: ' . $method . ' ' . $this->options['base_url'] . '/' . $url);
+    //echo('*** ' . $method . ' ' . $this->options['base_url'] . '/' . $url . "\n");
     $client = clone $this;
     $client->url = $url;
     $client->handle = curl_init();

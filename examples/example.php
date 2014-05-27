@@ -5,6 +5,7 @@ require_once '../src/Lingotek.php';
 use Lingotek\Dev;
 
 $access_token = 'b068b8d9-c35b-3139-9fe2-e22ee7998d9f'; // sandbox token
+$community_id = 'f49c4fca-ff93-4f01-a03e-aa36ddb1f2b8'; // specify the "Sandbox" community
 
 $client = new \Lingotek\RestClient(array(
   'access_token' => $access_token,
@@ -12,12 +13,15 @@ $client = new \Lingotek\RestClient(array(
     ));
 
 // Get Community
-$result = $client->get('community');
-$community_id = $result->decoded_response->entities[0]->properties->id; // get first community
+$result = $client->get('community/' . $community_id);
 
-echo "[" . $result->info->http_code . "] community_id: $community_id\n";
+$community = is_null($community_id) ? $result->decoded_response->entities[0] : $result->decoded_response; // get first community
+$community_id = $community->properties->id;
+$community_title = $community->properties->title;
+echo "[" . $result->info->http_code . "] community_id: $community_id (\"$community_title\")\n";
 
 // Grab the "Sample Project"
+$project_title = "Sample Project";
 $project_id = NULL;
 $params = array(
   'community_id' => $community_id
@@ -25,29 +29,29 @@ $params = array(
 $result = $client->get('project', $params);
 $projects = $result->decoded_response->entities;
 foreach ($projects as $project) {
-  if ($project->properties->title == "Sample Project") { //if project name is "Sample Project" then use the id
+  if ($project->properties->title == $project_title) { //if project name is $project_title then use the id
     $project_id = $project->properties->id;
     echo "[" . $result->info->http_code . "] project_id: $project_id (existing: \"" . $project->properties->title . "\")\n";
   }
 }
 
 if (is_null($project_id)) {
-// Create Project (when "Sample Project" was not found)
+// Create Project (when project with $project_title was not found)
   $params = array(
-    'title' => 'Sample Project',
+    'title' => $project_title,
     'community_id' => $community_id,
     'workflow_id' => 'c675bd20-0688-11e2-892e-0800200c9a66' // machine translation workflow
   );
   $result = $client->post('project', $params);
   $project_id = substr($result->headers->content_location, strrpos($result->headers->content_location, '/') + 1); // temp until API 5 makes newly created id is available in JSON body
-  echo "[" . $result->info->http_code . "] project_id: $project_id (created)\n";
+  echo "[" . $result->info->http_code . "] project_id: $project_id (created: \"$project_title\")\n";
 }
 
 // Create Document
 $doc_params = array(
-  'title' => 'My New Document ' . time(),
-  'content' => 'The quick brown fox jumped over the lazy dog.',
-  'format' => 'PLAINTEXT',
+  'title' => 'Sample Document ' . time(), // the title of the document as named on TMS
+  'content' => (object) array('title' => 'Sample Document', 'body' => 'The quick brown fox jumped over the lazy dog.'), // content for translation
+  'format' => 'JSON',
   'locale_code' => 'en_US',
   'project_id' => $project_id
 );
@@ -93,7 +97,7 @@ $params = array(
 );
 foreach ($locale_codes as $locale_code) {
   $params['locale_code'] = $locale_code;
-  $result = $client->post('target', $params);
+  $result = $client->post('document/{document_id}/translation', $params);
   echo "[" . $result->info->http_code . "] translation requested: $document_id => $locale_code \n";
 }
 

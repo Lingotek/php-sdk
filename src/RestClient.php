@@ -503,6 +503,24 @@ class RestClient implements \Iterator, \ArrayAccess {
     return $this->decoded_response;
   }
 
+  public function generate_workbench_link($document_id, $locale_code, $client_id, $username, $acting_username = "anonymous", $base_url = NULL, $expiration = NULL) {
+    $expiration_default = time() + (60 * 30); // 30-minute default, otherwise use $expiration as passed in
+    $expiration = is_null($expiration) ? $expiration_default : $expiration;
+    $base_url = is_null($base_url) ? substr($this->options['base_url'], 0, strrpos($this->options['base_url'], '/')) : $base_url;
+    $data = array(
+      'document_id' => $document_id,
+      'locale_code' => $locale_code,
+      'client_id' => $client_id,
+      'username' => $username,
+      'acting_username' => $acting_username,
+      'expiration' => $expiration
+    );
+    $query_data = utf8_encode(http_build_query($data));
+    $hmac = urlencode(base64_encode(hash_hmac('sha1', $query_data, $this->options['access_token'], TRUE)));
+    $workbench_url = $base_url . '/lingopoint/portal/wb.action?' . $query_data . "&hmac=" . $hmac;
+    return $workbench_url;
+  }
+
   /**
    * Debug function
    */

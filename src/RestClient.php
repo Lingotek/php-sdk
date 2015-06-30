@@ -503,7 +503,7 @@ class RestClient implements \Iterator, \ArrayAccess {
     return $this->decoded_response;
   }
 
-  public function generate_workbench_link($document_id, $locale_code, $client_id, $username, $acting_username, $base_url = NULL, $expiration = NULL) {
+  public function generate_workbench_link($document_id, $locale_code, $client_id, $login_id, $acting_login_id, $base_url = NULL, $expiration = NULL) {
     $expiration_default = time() + (60 * 30); // 30-minute default, otherwise use $expiration as passed in
     $expiration = is_null($expiration) ? $expiration_default : $expiration;
     $base_url = is_null($base_url) ? substr($this->options['base_url'], 0, strrpos($this->options['base_url'], '/')) : $base_url;
@@ -511,8 +511,8 @@ class RestClient implements \Iterator, \ArrayAccess {
       'document_id' => $document_id,
       'locale_code' => $locale_code,
       'client_id' => $client_id,
-      'login_id' => $username,
-      'acting_login_id' => $acting_username,
+      'login_id' => $login_id,
+      'acting_login_id' => $acting_login_id,
       'expiration' => $expiration
     );
     $query_data = utf8_encode(http_build_query($data));

@@ -24,7 +24,8 @@ echo "[" . $result->info->http_code . "] community_id: $community_id (\"$communi
 $project_title = "Sample Project";
 $project_id = NULL;
 $params = array(
-  'community_id' => $community_id
+  'community_id' => $community_id,
+  'limit' => 5000
 );
 $result = $client->get('project', $params);
 $projects = $result->decoded_response->entities;
@@ -71,7 +72,7 @@ while (!$done_processing) {
   $i++;
   echo "\t#$i | check status: ";
   try {
-    $result = $client->get('document', $params);
+    $result = $client->get('document/{document_id}/status', $params);
   } catch (Exception $e) {
     echo " [" . $e->getCode() . "] "; //"(" . $e->getMessage() . ")\n";
     echo "importing\n";
@@ -90,7 +91,7 @@ while (!$done_processing) {
 }
 
 // Add Translation Targets
-$locale_codes = array('zh_CN'); // Chinese
+$locale_codes = array('zh_CN','es_MX');
 $params = array(
   'document_id' => $document_id,
   'workflow_id' => 'c675bd20-0688-11e2-892e-0800200c9a66' // machine translation workflow

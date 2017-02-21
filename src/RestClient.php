@@ -348,8 +348,12 @@ class RestClient implements \Iterator, \ArrayAccess {
     else {
       $parameters = array_merge($client->options['parameters'], $parameters);
     }
-    if (in_array(strtoupper($method), array('POST', 'DELETE', 'PUT'))) {
+    if (!in_array(strtoupper($method), array('GET', 'HEAD'))) {
       $curlopt['CURLOPT_CUSTOMREQUEST'] = strtoupper($method);
+    } else if(in_array(strtoupper($method), array('HEAD'))){
+      $curlopt['CURLOPT_NOBODY'] = TRUE;
+    }
+    if (in_array(strtoupper($method), array('POST', 'DELETE', 'PUT', 'PATCH'))) {
       $curlopt['CURLOPT_POST'] = TRUE;
       $curlopt['CURLOPT_POSTFIELDS'] = is_string($parameters) ? $parameters : $parameters;
     }

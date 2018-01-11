@@ -8,32 +8,30 @@
 namespace Lingotek;
 
 interface LingotekApiInterface {
-
-  public function getAccountInfo();
   /**
    * Get the available locales on Lingotek.
    *
    * @return array|bool
    *   Array of locales (as in de-DE, es-ES). FALSE if there is an error.
    */
-  public function getLocales();
+  public function getLocales(); //TJ
 
-  public function addDocument($args);
+  public function addDocument($args); //TJ
 
-  public function patchDocument($id, $args);
-  public function deleteDocument($id);
-  public function getDocumentTranslationStatuses($id);
-  public function getDocumentTranslationStatus($id, $locale);
-  public function getDocumentInfo($id);
-  public function getDocumentStatus($id);
-  public function addTranslation($id, $locale, $workflow_id = NULL);
-  public function getTranslation($id, $locale, $useSource);
-  public function deleteTranslation($id, $locale);
-  public function getCommunities();
-  public function getProjects($community_id);
-  public function getProject($token, $id);
-  public function getVaults($community_id);
-  public function getWorkflows($community_id);
+  public function patchDocument($id, $args); //TJ
+  public function deleteDocument($id); //TJ
+  public function getDocumentTranslationStatuses($id); //TJ
+  public function getDocumentTranslationStatus($id, $locale); //Joey
+  public function getDocumentInfo($id); //Joey
+  public function getDocumentStatus($id); //Joey
+  public function addTranslation($id, $locale, $workflow_id = NULL); //Stephanie
+  public function getTranslation($id, $locale, $useSource); //Stephanie
+  public function deleteTranslation($id, $locale); //Stephanie
+  public function getCommunities(); //Joey
+  public function getProjects($community_id); //Stephanie
+  public function getProject($token, $id); //Chris 
+  public function getVaults($community_id); //Chris
+  public function getWorkflows($community_id); //Chris
 
   /**
    * Get the available filters on Lingotek.
@@ -41,6 +39,6 @@ interface LingotekApiInterface {
    * @return
    *   Array of filters as in (id, label). FALSE if there is an error.
    */
-  public function getFilters();
+  public function getFilters(); //Chris
 
 }

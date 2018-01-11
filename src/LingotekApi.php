@@ -24,14 +24,14 @@ use Lingotek\InvalidUrlPatternException;
  */
 
 class LingotekApi implements LingotekApiInterface {
-  protected $client;
+  	protected $client;
 
-  public function __construct($access_token) {
-    $this->$client = new RestClient(array(
-      'access_token' => $access_token,
-      'base_url' => RestClient::URL_PRODUCTION
-        ));
-  }
+  	public function __construct($access_token) {
+    	$this->$client = new RestClient(array(
+    		'access_token' => $access_token,
+      		'base_url' => RestClient::URL_PRODUCTION
+  		));
+	}
   public function getLocales() {
     // $this->logger->debug('Starting Locales request: /api/locale with args [limit => 1000]');
     // /** @var ResponseInterface $response */
@@ -48,20 +48,6 @@ class LingotekApi implements LingotekApiInterface {
     //   throw new LingotekApiException('Error requesting locales: ' . $e->getMessage());
     // }
     // return FALSE;
-  }
-
-  public function getAccountInfo() {
-    // try {
-    //   $access_token = $this->lingotekClient->getCurrentToken();
-    //   $this->logger->debug('Starting account info request: /auth/oauth2/access_token_info?access_token=%token', ['%token' => $access_token]);
-    //   $response = $this->lingotekClient->get('/auth/oauth2/access_token_info?access_token=' . $access_token);
-    // }
-    // catch (\Exception $e) {
-    //   $this->logger->error('Error requesting account info: %message.', ['%message' =>  $e->getMessage()]);
-    //   throw new LingotekApiException('Failed to get account info: ' . $e->getMessage());
-    // }
-    // $this->logger->debug('getAccountInfo response received, code %code and body %body', ['%code' => $response->getStatusCode(), '%body' => (string) $response->getBody(TRUE)]);
-    // return $response;
   }
 
   public function addDocument($args) {
@@ -142,17 +128,15 @@ class LingotekApi implements LingotekApiInterface {
   }
 
   public function getDocumentTranslationStatuses($id) {
-    // try {
-    //   $this->logger->debug('Lingotek::getDocumentTranslationStatuses called with %id', ['%id' => $id]);
-    //   $response = $this->lingotekClient->get('/api/document/' . $id . '/translation');
-    // }
-    // catch (\Exception $e) {
-    //   $this->logger->error('Error getting document translation status (%id): %message.',
-    //     ['%id' => $id, '%message' =>  $e->getMessage()]);
-    //   throw new LingotekApiException('Failed to get document translation status: ' . $e->getMessage());
-    // }
-    // $this->logger->debug('getDocumentTranslationStatuses response received, code %code and body %body', ['%code' => $response->getStatusCode(), '%body' => (string) $response->getBody(TRUE)]);
-    // return $response;
+    try {
+      $response = $this->client->get('/api/document/' . $id . '/translation');
+    }
+    catch (\Exception $e) {
+      // log error
+    	throw new RestClientException();
+    }
+      // log success
+    return $response;
   }
 
   public function getDocumentTranslationStatus($id, $locale) {

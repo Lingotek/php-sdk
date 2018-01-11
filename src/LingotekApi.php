@@ -154,59 +154,55 @@ class LingotekApi implements LingotekApiInterface {
     // return $response;
   }
 
-  public function addTranslation($id, $locale, $workflow_id = NULL) {
-    // try {
+public function addTranslation($id, $locale, $workflow_id = NULL) {
+    try {
     //   $this->logger->debug('Lingotek::addTranslation called with id ' . $id . ' and locale ' . $locale);
-    //   $args = ['locale_code' => $locale];
-    //   if ($workflow_id) {
-    //     $args['workflow_id'] = $workflow_id;
-    //   }
-    //   $response = $this->lingotekClient->post('/api/document/' . $id . '/translation', $args);
-    // }
-    // catch (\Exception $e) {
-    //   // If the problem is that the translation already exist, don't fail.
-    //   if ($e->getCode() === Response::HTTP_BAD_REQUEST) {
-    //     $responseBody = json_decode($e->getResponse()->getBody(), TRUE);
-    //     if ($responseBody['messages'][0] === 'Translation (' . $locale . ') already exists.') {
-    //       $this->logger->info('Added an existing target for %id with %args.',
-    //         ['%id' => $id, '%args' => var_export($args, TRUE)]);
-    //     }
-    //     return new \GuzzleHttp\Psr7\Response(Response::HTTP_CREATED);
-    //   }
-    //   $this->logger->error('Error requesting translation (%id, %args): %message.',
-    //     ['%id' => $id, '%args' => var_export($args, TRUE), '%message' =>  $e->getMessage()]);
-    //   throw new LingotekApiException('Failed to add translation: ' . $e->getMessage());
-    // }
-    // $this->logger->debug('addTranslation response received, code %code and body %body', ['%code' => $response->getStatusCode(), '%body' => (string) $response->getBody(TRUE)]);
-    // return $response;
+      $args = ['locale_code' => $locale];
+      if ($workflow_id) {
+        $args['workflow_id'] = $workflow_id;
+      }
+      $response = $this->client->post('/api/document/' . $id . '/translation', $args);
+    }
+    catch (\Exception $e) {
+      // If the problem is that the translation already exist, don't fail.
+      if ($e->getCode() === Response::HTTP_BAD_REQUEST) {
+        $responseBody = $e->getResponse()->getBody();
+        if ($responseBody['messages'][0] === 'Translation (' . $locale . ') already exists.') {
+          //$this->logger->info('Added an existing target for %id with %args.', ['%id' => $id, '%args' => var_export($args, TRUE)]);
+        }
+        return new \GuzzleHttp\Psr7\Response(Response::HTTP_CREATED);
+      }
+      //$this->logger->error('Error requesting translation (%id, %args): %message.', ['%id' => $id, '%args' => var_export($args, TRUE), '%message' =>  $e->getMessage()]);
+      throw new RestClientException('Failed to add translation: ' . $e->getMessage());
+    }
+    //$this->logger->debug('addTranslation response received, code %code and body %body', ['%code' => $response->getStatusCode(), '%body' => (string) $response->getBody(TRUE)]);
+    return $response;
   }
 
   public function getTranslation($id, $locale, $useSource = FALSE) {
-    // try {
-    //   $this->logger->debug('Lingotek::getTranslation called with id ' . $id . ' and locale ' . $locale);
-    //   $response = $this->lingotekClient->get('/api/document/' . $id . '/content', array('locale_code' => $locale, 'use_source' => $useSource));
-    // }
-    // catch (\Exception $e) {
-    //   $this->logger->error('Error getting translation (%id, %locale): %message.',
-    //     ['%id' => $id, '%locale' => $locale, '%message' =>  $e->getMessage()]);
-    //   throw new LingotekApiException('Failed to add translation: ' . $e->getMessage());
-    // }
-    // $this->logger->debug('getTranslation response received, code %code and body %body', ['%code' => $response->getStatusCode(), '%body' => (string) $response->getBody(TRUE)]);
-    // return $response;
+    try {
+      //$this->logger->debug('Lingotek::getTranslation called with id ' . $id . ' and locale ' . $locale);
+      $response = $this->client->get('/api/document/' . $id . '/content', array('locale_code' => $locale, 'use_source' => $useSource));
+    }
+    catch (\Exception $e) {
+      //$this->logger->error('Error getting translation (%id, %locale): %message.', ['%id' => $id, '%locale' => $locale, '%message' =>  $e->getMessage()]);
+      throw new RestClientException('Failed to add translation: ' . $e->getMessage());
+    }
+    //$this->logger->debug('getTranslation response received, code %code and body %body', ['%code' => $response->getStatusCode(), '%body' => (string) $response->getBody(TRUE)]);
+    return $response;
   }
 
   public function deleteTranslation($id, $locale) {
-    // try {
-    //   $this->logger->debug('Lingotek::deleteTranslation called with id ' . $id . ' and locale ' . $locale);
-    //   $response = $this->lingotekClient->delete('/api/document/' . $id . '/translation', array('locale_code' => $locale));
-    // }
-    // catch (\Exception $e) {
-    //   $this->logger->error('Error getting translation (%id, %locale): %message.',
-    //     ['%id' => $id, '%locale' => $locale, '%message' =>  $e->getMessage()]);
-    //   throw new LingotekApiException('Failed to add translation: ' . $e->getMessage());
-    // }
-    // $this->logger->debug('deleteTranslation response received, code %code and body %body', ['%code' => $response->getStatusCode(), '%body' => (string) $response->getBody(TRUE)]);
-    // return $response;
+    try {
+      //this->logger->debug('Lingotek::deleteTranslation called with id ' . $id . ' and locale ' . $locale);
+      $response = $this->client->delete('/api/document/' . $id . '/translation', array('locale_code' => $locale));
+    }
+    catch (\Exception $e) {
+      //$this->logger->error('Error getting translation (%id, %locale): %message.', ['%id' => $id, '%locale' => $locale, '%message' =>  $e->getMessage()]);
+      throw new RestClientException('Failed to add translation: ' . $e->getMessage());
+    }
+    //$this->logger->debug('deleteTranslation response received, code %code and body %body', ['%code' => $response->getStatusCode(), '%body' => (string) $response->getBody(TRUE)]);
+    return $response;
   }
 
   public function getCommunities() {
@@ -235,16 +231,16 @@ class LingotekApi implements LingotekApiInterface {
   }
 
   public function getProjects($community_id) {
-    // try {
-    //   $this->logger->debug('Lingotek::getProjects called with id ' . $community_id);
-    //   $response = $this->lingotekClient->get('/api/project', array('community_id' => $community_id, 'limit' => 1000));
-    // }
-    // catch (\Exception $e) {
-    //   $this->logger->error('Error getting projects for community %community: %message.', ['%community' => $community_id, '%message' =>  $e->getMessage()]);
-    //   throw new LingotekApiException('Failed to get projects: ' . $e->getMessage());
-    // }
-    // $this->logger->debug('getProjects response received, code %code and body %body', ['%code' => $response->getStatusCode(), '%body' => (string) $response->getBody(TRUE)]);
-    // return $this->formatResponse($response);
+    try {
+      //$this->logger->debug('Lingotek::getProjects called with id ' . $community_id);
+      $response = $this->client->get('/api/project', array('community_id' => $community_id, 'limit' => 1000));
+    }
+    catch (\Exception $e) {
+      //$this->logger->error('Error getting projects for community %community: %message.', ['%community' => $community_id, '%message' =>  $e->getMessage()]);
+      throw new RestClientException('Failed to get projects: ' . $e->getMessage());
+    }
+    //$this->logger->debug('getProjects response received, code %code and body %body', ['%code' => $response->getStatusCode(), '%body' => (string) $response->getBody(TRUE)]);
+    return $response;
   }
 
   public function getVaults($community_id) {

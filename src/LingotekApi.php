@@ -24,7 +24,15 @@ use Lingotek\InvalidUrlPatternException;
  */
 
 class LingotekApi implements LingotekApiInterface {
-    public function getLocales() {
+  protected $client;
+
+  public function __construct($access_token) {
+    $this->$client = new RestClient(array(
+      'access_token' => $access_token,
+      'base_url' => RestClient::URL_PRODUCTION
+        ));
+  }
+  public function getLocales() {
     // $this->logger->debug('Starting Locales request: /api/locale with args [limit => 1000]');
     // /** @var ResponseInterface $response */
     // try {

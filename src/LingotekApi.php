@@ -222,16 +222,15 @@ class LingotekApi implements LingotekApiInterface {
   }
 
   public function getProject($project_id) {
-    // try {
-    //   $this->logger->debug('Lingotek::getProject called with id ' . $project_id);
-    //   $response = $this->lingotekClient->get('/api/project/' . $project_id);
-    // }
-    // catch (\Exception $e) {
-    //   $this->logger->error('Error getting project %project: %message.', ['%project' => $project_id, '%message' =>  $e->getMessage()]);
-    //   throw new LingotekApiException('Failed to get project: ' . $e->getMessage());
-    // }
-    // $this->logger->debug('getProject response received, code %code and body %body', ['%code' => $response->getStatusCode(), '%body' => (string) $response->getBody(TRUE)]);
-    // return $response->json();
+    try {
+      // LOGGER HERE
+      $response = $this->client->get('/api/project/'.$project_id);
+    }
+    catch (\Exception $e) {
+      // LOGGER HERE
+      throw new RestClientException('Failed to get project: '.$e->getMessage());
+    }
+    return $response;
   }
 
   public function getProjects($community_id) {
@@ -248,43 +247,41 @@ class LingotekApi implements LingotekApiInterface {
   }
 
   public function getVaults($community_id) {
-    // try {
-    //   $this->logger->debug('Lingotek::getVaults called with id ' . $community_id);
-    //   // We ignore $community_id, as it is not needed for getting the TM vaults.
-    //   $response = $this->lingotekClient->get('/api/vault', array('limit' => 100, 'is_owned' => 'TRUE'));
-    // }
-    // catch (\Exception $e) {
-    //   $this->logger->error('Error getting vaults for community %community: %message.', ['%community' => $community_id, '%message' =>  $e->getMessage()]);
-    //   throw new LingotekApiException('Failed to get vaults: ' . $e->getMessage());
-    // }
-    // $this->logger->debug('getVaults response received, code %code and body %body', ['%code' => $response->getStatusCode(), '%body' => (string) $response->getBody(TRUE)]);
-    // return $this->formatResponse($response);
+      try {
+        // LOGGER HERE
+        $response = $this->client->get('/api/vault', ['limit' => 100, 'is_owned' => TRUE]);
+      }
+      catch (\Exception $e) {
+        // LOGGER HERE
+        throw new RestClientException('Failed to get vaults: '.$e->getMessage());
+      }
+      return $response;
   }
 
   public function getWorkflows($community_id) {
-    // try {
-    //   $this->logger->debug('Lingotek::getWorkflows called with id ' . $community_id);
-    //   $response = $this->lingotekClient->get('/api/workflow', array('community_id' => $community_id, 'limit' => 1000));
-    // }
-    // catch (\Exception $e) {
-    //   $this->logger->error('Error getting workflows for community %community: %message.', ['%community' => $community_id, '%message' =>  $e->getMessage()]);
-    //   throw new LingotekApiException('Failed to get workflows: ' . $e->getMessage());
-    // }
-    // $this->logger->debug('getWorkflows response received, code %code and body %body', ['%code' => $response->getStatusCode(), '%body' => (string) $response->getBody(TRUE)]);
-    // return $this->formatResponse($response);
+      try {
+        // LOGGER HERE
+        $response = $this->client->get('/api/workflow', ['community_id'=>$community_id, 'limit'=>1000]);
+      }
+      catch (\Exception $e) {
+        // LOGGER HERE
+        throw new RestClientException('Failed to get workflows: '.$e->getMessage());
+      }
+      return $response;
   }
 
   /**
    * {@inheritdoc}
    */
   public function getFilters() {
-    // try {
-    //   $this->logger->debug('Lingotek::getFilters called.');
-    //   $response = $this->lingotekClient->get('/api/filter', ['limit' => 1000]);
-    // }
-    // catch (\Exception $e) {
-    //   throw new LingotekApiException('Failed to get filters: ' . $e->getMessage());
-    // }
-    // return $this->formatResponse($response);
+    try { 
+      // LOGGER HERE
+      $response = $this->client->get('/api/filter', ['limit' => 1000]);
+    }
+    catch (\Exception $e) {
+      // LOGGER HERE
+      throw new RestClientException('Failed to get filters: '.$e->getMessage());
+    }
+    return $response;
   }
 }

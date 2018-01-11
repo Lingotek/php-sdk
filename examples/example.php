@@ -7,6 +7,8 @@ use Lingotek\Dev;
 $access_token = 'b068b8d9-c35b-3139-9fe2-e22ee7998d9f'; // sandbox token
 $community_id = 'f49c4fca-ff93-4f01-a03e-aa36ddb1f2b8'; // specify the "Sandbox" community
 
+$lingotekApi = new \Lingotek\LingotekApi($access_token);
+
 $client = new \Lingotek\RestClient(array(
   'access_token' => $access_token,
   'base_url' => \Lingotek\RestClient::URL_SANDBOX

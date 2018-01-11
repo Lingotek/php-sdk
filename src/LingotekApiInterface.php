@@ -29,7 +29,7 @@ interface LingotekApiInterface {
   public function deleteTranslation($id, $locale); //Stephanie
   public function getCommunities(); //Joey
   public function getProjects($community_id); //Stephanie
-  public function getProject($token, $id); //Chris 
+  public function getProject($id); //Chris 
   public function getVaults($community_id); //Chris
   public function getWorkflows($community_id); //Chris
 

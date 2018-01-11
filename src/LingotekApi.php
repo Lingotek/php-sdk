@@ -10,6 +10,7 @@ use Lingotek\RestClientException;
 use Lingotek\NotFound;
 use Lingotek\Unauthorized;
 use Lingotek\InvalidUrlPatternException;
+use Lingotek\LingotekApiInterface;
 
 /**
  * Lingotek SDK
@@ -27,7 +28,7 @@ class LingotekApi implements LingotekApiInterface {
   	protected $client;
 
   	public function __construct($access_token) {
-    	$this->$client = new RestClient(array(
+    	$this->client = new RestClient(array(
     		'access_token' => $access_token,
       		'base_url' => RestClient::URL_PRODUCTION
   		));

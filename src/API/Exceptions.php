@@ -11,7 +11,7 @@
  * Usage: readme.md
  */
 
-namespace Lingotek;
+namespace Lingotek\API;
 
 class Exception extends \Exception {}
 
@@ -19,8 +19,8 @@ class InvalidArgumentException extends \Exception {}
 
 class RestClientException extends \Exception {}
 
-class NotFound extends \Lingotek\RestClientException {}
+class NotFound extends \Lingotek\API\RestClientException {}
 
-class Unauthorized extends \Lingotek\RestClientException {}
+class Unauthorized extends \Lingotek\API\RestClientException {}
 
-class InvalidUrlPatternException extends \Lingotek\RestClientException {}
+class InvalidUrlPatternException extends \Lingotek\API\RestClientException {}

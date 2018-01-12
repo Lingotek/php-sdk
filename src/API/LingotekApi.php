@@ -1,16 +1,16 @@
 <?php
 
-namespace Lingotek;
+namespace Lingotek\API;
 
-use Lingotek\RestClient;
-use Lingotek\Dev;
-use Lingotek\Exception;
-use Lingotek\InvalidArgumentException;
-use Lingotek\RestClientException;
-use Lingotek\NotFound;
-use Lingotek\Unauthorized;
-use Lingotek\InvalidUrlPatternException;
-use Lingotek\LingotekApiInterface;
+use Lingotek\HttpClient\RestClient;
+use Lingotek\Dev\Dev;
+use Lingotek\API\Exception;
+use Lingotek\API\InvalidArgumentException;
+use Lingotek\API\RestClientException;
+use Lingotek\API\NotFound;
+use Lingotek\API\Unauthorized;
+use Lingotek\API\InvalidUrlPatternException;
+use Lingotek\API\LingotekApiInterface;
 
 /**
  * Lingotek SDK

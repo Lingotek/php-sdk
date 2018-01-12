@@ -1,8 +1,8 @@
 <?php
 
-namespace Lingotek;
+namespace Lingotek\HttpClient;
 
-use Lingotek\RestClientException;
+use Lingotek\API\RestClientException;
 
 /**
  * Lingotek SDK

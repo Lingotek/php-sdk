@@ -2,11 +2,11 @@
 
 namespace Lingotek;
 
-require('LingotekApiInterface.php');
-require('LingotekApi.php');
-require('RestClient.php');
-require('Exceptions.php');
-require('Dev.php');
+require('API/LingotekApiInterface.php');
+require('API/LingotekApi.php');
+require('HttpClient/RestClient.php');
+require('API/Exceptions.php');
+require('Dev/Dev.php');
 
 /**
  * Lingotek SDK

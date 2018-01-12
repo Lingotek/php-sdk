@@ -5,7 +5,7 @@
  * Contains \Drupal\lingotek\Remote\LingotekApiInterface.
  */
 
-namespace Lingotek;
+namespace Lingotek\API;
 
 interface LingotekApiInterface {
 
@@ -156,7 +156,7 @@ interface LingotekApiInterface {
   *
   * For more information see https://devzone.lingotek.com/api-explorer
   */
-  public function getCommunities($args = ['limit' => 1000);
+  public function getCommunities($args = ['limit' => 1000]);
 
   /**
   * Get a project which the active user has access to

@@ -1,5 +1,5 @@
 <?php
-namespace Lingotek;
+namespace Lingotek\Dev;
 
 class Dev {
 

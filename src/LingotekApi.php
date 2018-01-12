@@ -34,72 +34,31 @@ class LingotekApi implements LingotekApiInterface {
   		));
 	}
   public function getLocales() {
-    // $this->logger->debug('Starting Locales request: /api/locale with args [limit => 1000]');
-    // /** @var ResponseInterface $response */
-    // try {
-    //   $response = $this->lingotekClient->get('/api/locale', ['limit' => 1000]);
-    //   if ($response->getStatusCode() == Response::HTTP_OK) {
-    //     $data = json_decode($response->getBody(), TRUE);
-    //     $this->logger->debug('getLocales response received, code %code and body %body', ['%code' => $response->getStatusCode(), '%body' => (string) $response->getBody(TRUE)]);
-    //     return $data;
-    //   }
-    // }
-    // catch (\Exception $e) {
-    //   $this->logger->error('Error requesting locales: %message.', ['%message' =>  $e->getMessage()]);
-    //   throw new LingotekApiException('Error requesting locales: ' . $e->getMessage());
-    // }
-    // return FALSE;
+    $result = $this->client->get('locale/');
+    return $result;
   }
 
   public function addDocument($args) {
-    // try {
-    //   $this->logger->debug('Lingotek::addDocument (POST /api/document) called with ' . var_export($args, TRUE));
-    //   $response = $this->lingotekClient->post('/api/document', $args, TRUE);
-    // }
-    // catch (\Exception $e) {
-    //   $this->logger->error('Error adding document: %message.', ['%message' =>  $e->getMessage()]);
-    //   throw new LingotekApiException('Error adding document: ' . $e->getMessage());
-    // }
-    // if ($response->getStatusCode() == Response::HTTP_ACCEPTED) {
-    //   $data = json_decode($response->getBody(), TRUE);
-    //   $this->logger->debug('addDocument response received, code %code and body %body', ['%code' => $response->getStatusCode(), '%body' => (string) $response->getBody(TRUE)]);
-    //   if (!empty($data['properties']['id'])) {
-    //     return $data['properties']['id'];
-    //   }
-    // }
-    // // TODO: log warning
-    // return FALSE;
+    $result = $this->client->post('document', $args);
+    return $result;
   }
 
-  public function patchDocument($id, $args) {
-    // try {
-    //   $this->logger->debug('Lingotek::pathDocument (PATCH /api/document) called with id %id and args %args', ['%id' => $id, '%args' => var_export($args, TRUE)]);
-    //   $response = $this->lingotekClient->patch('/api/document/' . $id, $args);
-    // }
-    // catch (\Exception $e) {
-    //   $this->logger->error('Error updating document: %message.', ['%message' =>  $e->getMessage()]);
-    //   throw new LingotekApiException('Failed to patch (update) document: ' . $e->getMessage());
-    // }
-    // $this->logger->debug('patchDocument response received, code %code and body %body', ['%code' => $response->getStatusCode(), '%body' => (string) $response->getBody(TRUE)]);
-    // return $response;
+  /*
+   * Updates a Document
+   * Required arguments to be included in $args:
+   *  'id' => 98dee54e-d5c7-4935-be0f-ac5a3617be00
+   */
+  public function patchDocument($args) {
+    $result = $this->client->patch('document/{id}', $args);
+    return $result;
   }
 
+  /*
+   * Deletes a Document
+   */
   public function deleteDocument($id) {
-    // try {
-    //   $this->logger->debug('Lingotek::deleteDocument called with id ' . $id);
-    //   $response = $this->lingotekClient->delete('/api/document' . '/' . $id);
-    // }
-    // catch (\Exception $e) {
-    //   $http_status_code = $e->getCode();
-    //   if ($http_status_code === Response::HTTP_NOT_FOUND) {
-    //     $this->logger->error('Error deleting document: %message.', ['%message' =>  $e->getMessage()]);
-    //     return new Response($e->getMessage(), Response::HTTP_NOT_FOUND);
-    //   }
-    //   $this->logger->error('Error deleting document: %message.', ['%message' =>  $e->getMessage()]);
-    //   throw new LingotekApiException('Failed to delete document: ' . $e->getMessage(), $http_status_code, $e);
-    // }
-    // $this->logger->debug('deleteDocument response received, code %code and body %body', ['%code' => $response->getStatusCode(), '%body' => (string) $response->getBody(TRUE)]);
-    // return $response;
+    $result = $this->client->delete('document/' . $id);
+    return $result;
   }
 
   public function getDocumentInfo($id) {
@@ -271,7 +230,7 @@ public function addTranslation($id, $locale, $workflow_id = NULL) {
    * {@inheritdoc}
    */
   public function getFilters() {
-    try { 
+    try {
       // LOGGER HERE
       $response = $this->client->get('/api/filter', ['limit' => 1000]);
     }

@@ -11,7 +11,7 @@ $lingotekApi = new \Lingotek\LingotekApi($access_token);
 
 $client = new \Lingotek\RestClient(array(
   'access_token' => $access_token,
-  'base_url' => \Lingotek\RestClient::URL_SANDBOX
+  'base_url' => \Lingotek\RestClient::URL_PRODUCTION
     ));
 
 // Get Community

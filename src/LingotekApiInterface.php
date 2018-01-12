@@ -18,7 +18,7 @@ interface LingotekApiInterface {
 
   public function addDocument($args); //TJ
 
-  public function patchDocument($id, $args); //TJ
+  public function patchDocument($args); //TJ
   public function deleteDocument($id); //TJ
   public function getDocumentTranslationStatuses($id); //TJ
   public function getDocumentTranslationStatus($id, $locale); //Joey
@@ -29,7 +29,7 @@ interface LingotekApiInterface {
   public function deleteTranslation($id, $locale); //Stephanie
   public function getCommunities(); //Joey
   public function getProjects($community_id); //Stephanie
-  public function getProject($id); //Chris 
+  public function getProject($id); //Chris
   public function getVaults($community_id); //Chris
   public function getWorkflows($community_id); //Chris
 

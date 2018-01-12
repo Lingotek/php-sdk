@@ -35,8 +35,7 @@ class LingotekApi implements LingotekApiInterface {
 	}
 
   /**
-   * Get all supported locales
-   * For more information see https://devzone.lingotek.com/api-explorer
+   * {@inheritdoc}
    */
   public function getLocales() {
     $result = $this->client->get('locale/');
@@ -44,14 +43,7 @@ class LingotekApi implements LingotekApiInterface {
   }
 
   /**
-   * Add a new document to an existing project
-   * @param $args
-   * Required arguments to be included in $args:
-   *  title (Document name)
-   *  locale_code (Document language)
-   *  project_id (Project to associate the document to)
-   *
-   * For more information see https://devzone.lingotek.com/api-explorer
+   * {@inheritdoc}
    */
   public function addDocument($args) {
     $result = $this->client->post('document', $args);
@@ -59,12 +51,7 @@ class LingotekApi implements LingotekApiInterface {
   }
 
   /**
-   * Update an existing document
-   * @param $args
-   * Required arguments to be included in $args:
-   *  'id' => 98dee54e-d5c7-4935-be0f-ac5a3617be00
-   *
-   * For more information see https://devzone.lingotek.com/api-explorer
+   * {@inheritdoc}
    */
   public function patchDocument($args) {
     $result = $this->client->patch('document/{id}', $args);
@@ -72,11 +59,7 @@ class LingotekApi implements LingotekApiInterface {
   }
 
   /**
-   * Delete an existing Document
-   * @param $id
-   *  Required string that represents the Document ID
-   *
-   * For more information see https://devzone.lingotek.com/api-explorer
+   * {@inheritdoc}
    */
   public function deleteDocument($id) {
     $result = $this->client->delete('document/{id}',['id' => $id]);
@@ -84,11 +67,7 @@ class LingotekApi implements LingotekApiInterface {
   }
 
   /**
-   * Get a document which the active user has access to
-   * @param $id
-   *  Required string that represents the Document ID
-   *
-   * For more information see https://devzone.lingotek.com/api-explorer
+   * {@inheritdoc}
    */
   public function getDocumentInfo($id) {
     $result = $this->client->get('document/{id}',['id' => $id]);
@@ -96,11 +75,7 @@ class LingotekApi implements LingotekApiInterface {
   }
 
   /**
-   * Get the status of an existing document
-   * @param $id
-   *  Required string that represents the Document ID
-   *
-   * For more information see https://devzone.lingotek.com/api-explorer
+   * {@inheritdoc}
    */
   public function getDocumentStatus($id) {
     $result = $this->client->get('document/{id}/status', ['id' => $id]);
@@ -108,11 +83,7 @@ class LingotekApi implements LingotekApiInterface {
   }
 
   /**
-   * Get the status of all translations for an existing document
-   * @param $id
-   *  Required string that represents the Document ID
-   *
-   * For more information see https://devzone.lingotek.com/api-explorer
+   * {@inheritdoc}
    */
   public function getDocumentTranslationStatuses($id) {
     $result = $this->client->get('document/{id}/translation', ['id' => $id]);
@@ -120,13 +91,7 @@ class LingotekApi implements LingotekApiInterface {
   }
 
   /**
-   * Get the status of a specific translation for an existing document
-   * @param $id
-   *  Required string Id of the document to which a translation will be added
-   * @param $locale
-   *  Required string Locale code for the translation
-   *
-   * For more information see https://devzone.lingotek.com/api-explorer
+   * {@inheritdoc}
    */
   public function getDocumentTranslationStatus($id, $locale) {
     $result = $this->client->get('document/{id}/translation/{locale}', ['id' => $id, 'locale' => $locale]);
@@ -134,17 +99,7 @@ class LingotekApi implements LingotekApiInterface {
   }
 
   /**
-   * Request translations for an existing document
-   * @param $id
-   *  Required string Id of the document to which a translation will be added
-   * @param $locale_code
-   *  Required string Locale Code of the language to use for the translation
-   * @param $workflow_id
-   *  Optional string Id of the workflow to use when creating the translation
-   * @param $due_date
-   *  Optional string Due date to use for the translation
-   *
-   * For more information see https://devzone.lingotek.com/api-explorer
+   * {@inheritdoc}
    */
   public function addTranslation($id, $locale, $workflow_id = NULL) {
     $args = [
@@ -159,55 +114,68 @@ class LingotekApi implements LingotekApiInterface {
   }
 
   /**
-   * Request translations for an existing document
-   * @param $id
-   *  Required string Id of the document to which a translation will be added
-   * @param $locale_code
-   *  Required string Locale Code of the language to use for the translation
-   * @param $workflow_id
-   *  Optional string Id of the workflow to use when creating the translation
-   * @param $due_date
-   *  Optional string Due date to use for the translation
-   *
-   * For more information see https://devzone.lingotek.com/api-explorer
+   * {@inheritdoc}
    */
   public function getTranslation($id, $locale, $useSource = FALSE) {
     $result = $this->client->get('document/{id}/content', ['id' => $id, 'locale_code' => $locale, 'use_source' => $useSource]);
     return $result;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function deleteTranslation($id, $locale) {
-    $result = $this->client->delete('document/{id}/translation', ['id' => $id, 'locale_code' => $locale]);
+    $result = $this->client->delete('document/{id}/translation/{locale}', ['id' => $id, 'locale' => $locale]);
     return $result;
   }
 
-  public function getCommunities() {
-    $result = $this->client->get('community', ['limit' => 100]);
+  /**
+   * {@inheritdoc}
+   */
+  public function getCommunities($args = ['limit' => 1000]) {
+    $result = $this->client->get('community', $args);
     return $result;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getProject($project_id) {
     $result = $this->client->get('project/{id}', ['id' => $project_id]);
     return $result;
   }
 
-  public function getProjects($community_id) {
-    $result = $this->client->get('project', ['community_id' => $community_id, 'limit' => 1000]);
+  /**
+   * {@inheritdoc}
+   */
+  public function getProjects($community_id, $args = ['limit' => 1000]) {
+    $args['community_id'] = $community_id;
+    $result = $this->client->get('project', $args);
     return $result;
   }
 
-  public function getVaults($community_id) {
-    $result = $this->client->get('vault', ['limit' => 100, 'is_owned' => TRUE]);
+  /**
+   * {@inheritdoc}
+   */
+  public function getVaults($args = ['limit' => 100, 'is_owned' => TRUE]) {
+    $result = $this->client->get('vault', $args);
     return $result;
   }
 
-  public function getWorkflows($community_id) {
-    $result = $this->client->get('workflow', ['community_id'=>$community_id, 'limit'=>1000]);
+  /**
+   * {@inheritdoc}
+   */
+  public function getWorkflows($community_id, $args = ['limit' => 1000]) {
+    $args['community_id'] = $community_id;
+    $result = $this->client->get('workflow', $args);
     return $result;
   }
 
-  public function getFilters() {
-    $result = $this->client->get('filter', ['limit' => 1000]);
+  /**
+   * {@inheritdoc}
+   */
+  public function getFilters($args = ['limit' => 1000]) {
+    $result = $this->client->get('filter', $args);
     return $result;
   }
 }

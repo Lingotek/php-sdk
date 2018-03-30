@@ -32,6 +32,16 @@ interface LingotekApiInterface {
   public function addDocument($args);
 
   /**
+   * Get all documents the user has access to
+   * @param $args
+   * @return $result
+   *  Full cURL response
+   *
+   * For more information see https://devzone.lingotek.com/api-explorer
+   */
+  public function getDocuments($args);
+
+  /**
    * Update an existing document
    * @param $args
    * Required arguments to be included in $args:

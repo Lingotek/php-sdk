@@ -53,6 +53,14 @@ class LingotekApi implements LingotekApiInterface {
   /**
    * {@inheritdoc}
    */
+  public function getDocuments($args) {
+    $result = $this->client->get('document', $args);
+    return $result;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function patchDocument($args) {
     $result = $this->client->patch('document/{id}', $args);
     return $result;

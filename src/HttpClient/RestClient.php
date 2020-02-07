@@ -412,7 +412,7 @@ class RestClient implements \Iterator, \ArrayAccess {
 
   public function parse_response($response) {
     $headers = null;
-    $parts = explode("\r\n\r\n", $response);
+    $parts = explode("\r\n\r\n", $response, 2);
     $body = '';
     if (self::DEBUG)
       $this->debug(1, 'curl response', $response);

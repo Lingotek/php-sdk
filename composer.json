@@ -4,7 +4,7 @@
   "description": "The Lingotek PHP API Client",
   "keywords": ["multilingual", "php", "rest"],
   "homepage": "https://github.com/lingotek/php",
-  "license": ["BSD 3-Clause"],
+  "license": ["BSD-3-Clause"],
   "authors": [
     {
       "name": "Lingotek",
@@ -28,7 +28,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "dev"
+      "dev-master": "1.0.x-dev"
     }
   }
 }

@@ -9,11 +9,6 @@
     {
       "name": "Lingotek",
       "homepage": "http://www.lingotek.com"
-    },
-    {
-      "name": "Matt Smith",
-      "email": "msmith@lingotek.com",
-      "homepage": "https://github.com/smithworx"
     }
   ],
   "require": {
@@ -25,10 +20,5 @@
   },
   "autoload": {
     "classmap": ["src/"]
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-master": "1.0.x-dev"
-    }
   }
 }

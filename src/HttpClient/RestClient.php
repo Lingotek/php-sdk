@@ -55,7 +55,7 @@ class RestClient implements \Iterator, \ArrayAccess {
   /** @var array $headers parsed response header object */
   public $headers;
 
-  /** @var array $info response object */
+  /** @var oobject $info response object */
   public $info;
 
   /** @var string $error response error string */
